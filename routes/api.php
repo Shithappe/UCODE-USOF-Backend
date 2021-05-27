@@ -24,28 +24,22 @@ use Illuminate\Support\Facades\Route;
 
 
 //  Public
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
-Route::post('/auth/reset', [MailController::class, 'sendEmail']);
+Route::post('/auth/register', [AuthController::class, 'register']);                     // Register user
+Route::post('/auth/login', [AuthController::class, 'login']);                           // Log in
+Route::post('/auth/reset', [MailController::class, 'sendEmail']);                       // Reset password
 
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/users/{id}', [UserController::class, 'show']);
-Route::patch('/users/{id}', [UserController::class, 'update']);
-Route::delete('/users/{id}', [UserController::class, 'destroy']);
+Route::get('/users/{id}', [UserController::class, 'show']);                             // Show user by id
 
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/post/{id}', [ProductController::class, 'show']);
-Route::get('/post/seach/{name}', [ProductController::class, 'search']);
+Route::get('/posts', [PostController::class, 'index']);                                 // Show all posts
+Route::get('/post/{id}', [ProductController::class, 'show']);                           // Show posts by id
+Route::get('/post/seach/{name}', [ProductController::class, 'search']);                 // Search post by name
 
+Route::get('/categories', [CategoryController::class, 'index']);                        // Show all categories
+Route::get('/categories/{id}', [CategoryController::class, 'show']);                    // Show category by id
+Route::get('/categories/seach/{name}', [CategoryController::class, 'search']);          // Search category by title
 
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::post('/categories', [CategoryController::class, 'store']);
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
-Route::put('/categories/{id}', [CategoryController::class, 'update']);
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
-Route::get('/categories/seach/{name}', [CategoryController::class, 'search']);
-
-Route::get('/posts/{id}/likes', [LikeController::class, 'index']);
+Route::get('/posts/{id}/comments', [CommentController::class, 'index']);                // Show all comments of post
+Route::get('/posts/{id}/likes', [LikeController::class, 'index']);                      // Show coutn likes of post
 
 
 
@@ -54,21 +48,29 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::get('/products/seach/{name}', [ProductController::class, 'search']);
 
 
-
-Route::post('/post/add', [PostController::class, 'store']);
-
-
 // Private
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/auth/logout', [AuthController::class, 'logout']);
-    Route::post('/auth/reset_pass', [AuthController::class, 'reset_pass']);
-    Route::post('/posts', [PostController::class, 'store']);
+
+    Route::post('/auth/logout', [AuthController::class, 'logout']);                     // Log out
+    Route::post('/auth/reset_pass', [AuthController::class, 'reset_pass']);             // Change password
+
+    Route::get('/users', [UserController::class, 'index']);                             // Show all users
+    Route::patch('/users/{id}', [UserController::class, 'update']);                     // Update user date by id
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);                   // Delete user
+
+
+    Route::post('/posts', [PostController::class, 'store']);                            // Add post
+    Route::post('/categories', [CategoryController::class, 'store']);                   // Add category
+
+    Route::put('/categories/{id}', [CategoryController::class, 'update']);              // Update category date by id
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);          // Delete category
+
+ 
+    Route::post('/posts/{id}/comments', [CommentController::class, 'store']);           // Add comment to post
+    Route::post('/posts/{id}/likes', [LikeController::class, 'store']);                 // Add like to post
+    Route::delete('/posts/{id}/likes', [LikeController::class, 'destroy']);             // Delete like 
+
     Route::get('/products/seach/{name}', [ProductController::class, 'search']);
-    Route::post('/posts/{id}/comments', [CommentController::class, 'store']);
-    Route::get('/posts/{id}/comments', [CommentController::class, 'index']);
-    Route::post('/posts/{id}/likes', [LikeController::class, 'store']);
-
-
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);

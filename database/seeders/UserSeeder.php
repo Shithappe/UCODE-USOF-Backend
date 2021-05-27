@@ -13,16 +13,26 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $users = [];
 
-        $users[] = [
+
+        $admin = [
             'name' => 'Admin',
             'login' => 'admin',
             'email' => 'admin@example.com',
             'password' => bcrypt('admin'),
             'role' => 'admin'
         ];
-        \DB::table("users")->insert($users);
+
+        $user = [
+            'name' => 'max',
+            'login' => 'awd',
+            'email' => '2awdawd2@gmail.com',
+            'password' => bcrypt('awd'),
+            'role' => 'user'
+        ];
+
+        \DB::table("users")->insert($user);
+        \DB::table("users")->insert($admin);
     }
 
     

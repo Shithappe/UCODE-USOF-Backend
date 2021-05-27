@@ -17,6 +17,7 @@ class PostController extends Controller
         $posts = Post::all();
         $result = array();
         foreach ($posts as $post) {
+            if ($post['status'] == 'active')
             $result[] = $this->show($post->id);
         }
         return $result;
@@ -46,8 +47,6 @@ class PostController extends Controller
         $new_post = Post::create($post_data);
 
         $categories = (json_decode($request->input('categories')))->id; 
-        // return $categories;
-
 
         foreach ($categories as $category) {
             if(\App\Models\Category::find($category)) {
@@ -67,18 +66,9 @@ class PostController extends Controller
     public function show($id)
     {
         $post_info = Post::find($id);
-
-
-        if ($post_info == null) {
-            return response()->json([
-                "error" => [
-                    "message"  => "No such post. Post with id $id not found."
-                ]
-            ], 404); 
-        }
-
-        // $post_info->rating = $this->getPostRating($id);
+        if ($post_info == null) return response('Not found', 404); 
         $post_info->categories = CategoryController::getAllPostCategories($id);
+
         return $post_info;
     }
 

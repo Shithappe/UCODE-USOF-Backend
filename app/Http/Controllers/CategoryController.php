@@ -26,11 +26,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->role == 'admin'){
         $request->validate([
             'title' => 'required|string'
         ]);
-
         return Category::create($request->all());
+        }
+        else return "You can`t do it";
     }
 
     static public function create($category_id, $post_id) {

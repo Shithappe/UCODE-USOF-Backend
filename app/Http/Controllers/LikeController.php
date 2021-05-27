@@ -14,7 +14,7 @@ class LikeController extends Controller
      */
     public function index($post_id)
     {
-        return Like::where('post_id', $post_id)->get();
+        return Like::where('post_id', $post_id)->get()->count();  // delete ->count() and will be returned all data with author of like
     }
 
     /**
@@ -85,8 +85,10 @@ class LikeController extends Controller
      * @param  \App\Models\Like  $like
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Like $like)
-    {
-        //
+    public function destroy(Like $like, $post_id)
+    {   
+        if ($like = Like::where('post_id', $post_id)->where('user_id', auth()->user()->id)->first()) 
+        return Like::destroy($like['id']);
+                        
     }
 }

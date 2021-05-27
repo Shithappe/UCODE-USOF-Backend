@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
         // Book::factory(50)->create();
 
         $this->call(UserSeeder::class);
-        \App\Models\User::factory(10)->create();
+        \App\Models\User::factory(8)->create();
     }
 }
