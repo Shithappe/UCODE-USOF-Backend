@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\postCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -32,6 +33,23 @@ class CategoryController extends Controller
         return Category::create($request->all());
     }
 
+    static public function create($category_id, $post_id) {
+        $data = [
+            'category_id' => $category_id,
+            'post_id' => $post_id
+        ];
+        return PostCategory::create($data);
+    }
+
+    static public function getAllPostCategories($post_id) {
+        $post_categories_raw = \App\Models\PostCategory::select('category_id as id')->where('post_id', $post_id)->get();
+        $post_categories = [];
+        for ($i=0; $i < count($post_categories_raw); $i++) {
+            $post_categories[$i] = $post_categories_raw[$i]->id;
+        }
+        return $post_categories;
+
+    }
     /**
      * Display the specified resource.
      *

@@ -14,7 +14,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::all();
+        $posts = Post::all();
+        $result = array();
+        foreach ($posts as $post) {
+            $result[] = $this->show($post->id);
+        }
+        return $result;
     }
 
     /**
@@ -26,17 +31,31 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // 'author' => 'required|string',
             'title' => 'required|string',
-            'content' => 'required|string'
+            'content' => 'required|string',
+            'categories' => 'required|json'
         ]);
+        $title = $request->input('title');
+        $content = $request->input('content');
+        
+        $post_data = ['author' => auth()->user()->login,
+                 'user_id' => auth()->user()->id,
+                 'title' => $title,
+                 'content' => $content];
+        printf(auth()->user()->id);
+        $new_post = Post::create($post_data);
+
+        $categories = (json_decode($request->input('categories')))->id; 
+        // return $categories;
 
 
-        $data = ['author' => auth()->user()->login,
-                 'title' => $request['title'],
-                 'content' => $request['content']];
-
-        return Post::create($data);
+        foreach ($categories as $category) {
+            if(\App\Models\Category::find($category)) {
+                CategoryController::create($category, $new_post->id);
+            }
+        }
+        
+        return $this->show($new_post->id);
     }
 
     /**
@@ -47,7 +66,20 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return Post::find($id);
+        $post_info = Post::find($id);
+
+
+        if ($post_info == null) {
+            return response()->json([
+                "error" => [
+                    "message"  => "No such post. Post with id $id not found."
+                ]
+            ], 404); 
+        }
+
+        // $post_info->rating = $this->getPostRating($id);
+        $post_info->categories = CategoryController::getAllPostCategories($id);
+        return $post_info;
     }
 
     /**
