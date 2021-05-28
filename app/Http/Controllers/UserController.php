@@ -63,6 +63,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        return User::destroy($id);
+        $user = User::find($id);
+        if ($id == auth()->user()->id) return User::destroy($id);
+        else return 'You can\'t delete other users';
     }
 }
