@@ -98,9 +98,16 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $id)
     {
-        //
+        $request = $request->validate([
+            'content' => 'required|string',
+        ]);
+        $comment = Comment::find($id);
+        if($comment['author'] == auth()->user()->login){
+        $comment->fill($request)->save();
+        return $comment;
+        }else return "You can't update other people's commentary";
     }
 
     /**

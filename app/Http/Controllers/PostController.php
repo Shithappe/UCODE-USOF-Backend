@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -43,7 +44,7 @@ class PostController extends Controller
                  'user_id' => auth()->user()->id,
                  'title' => $title,
                  'content' => $content];
-        printf(auth()->user()->id);
+
         $new_post = Post::create($post_data);
 
         $categories = (json_decode($request->input('categories')))->id; 
@@ -81,9 +82,11 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = Post::find($id);
-        $product->update($request->all());
-        return $product;
+        $post = Post::find($id);
+        if (auth()->user()->login == $post['author']){
+        $post->update($request->all());
+        return $post;}
+        else return "You can't update this";
     }
 
     /**

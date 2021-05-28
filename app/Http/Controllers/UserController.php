@@ -49,16 +49,10 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        // $user->update($request->all());
-        return $user;
-    }
-
-    public static function updateR(Request $id)
-    {
-        $user = User::find($id);
-        $user['rating'] = $user['rating']+1;
-        $user->update($user->all());
-        return $user;
+        if ($id == auth()->user()->id){$user->update($request->all());
+            return $user;}
+        else return 'You can\'t update other users';
+        //добавь обновление автора поста после смене логина 
     }
 
     /**

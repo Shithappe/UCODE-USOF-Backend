@@ -60,13 +60,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     Route::post('/posts', [PostController::class, 'store']);                            // Add post
+    Route::patch('/posts/{id}', [PostController::class, 'update']);                     // Update post
     Route::post('/categories', [CategoryController::class, 'store']);                   // Add category
 
-    Route::put('/categories/{id}', [CategoryController::class, 'update']);              // Update category date by id
+    Route::patch('/categories/{id}', [CategoryController::class, 'update']);            // Update category date by id
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);          // Delete category
 
  
     Route::post('/posts/{id}/comments', [CommentController::class, 'store']);           // Add comment to post
+    Route::patch('/comments/{id}', [CommentController::class, 'update']);               // Update comment
     Route::post('/posts/{id}/likes', [LikeController::class, 'store']);                 // Add like to post
     Route::delete('/posts/{id}/likes', [LikeController::class, 'destroy']);             // Delete like 
 
