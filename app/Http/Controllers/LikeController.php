@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Like;
+use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class LikeController extends Controller
@@ -12,7 +14,7 @@ class LikeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($post_id)
+    public static function index($post_id)
     {
         return Like::where('post_id', $post_id)->get()->count();  // delete ->count() and will be returned all data with author of like
     }
@@ -41,7 +43,11 @@ class LikeController extends Controller
             'user_id' => auth()->user()->id,
             'post_id' => $post_id
         ];
-
+        $post = Post::find($post_id);
+        $user = User::find($post->user_id);
+        $user->rating = $user->rating + 1;
+        $user->save();
+        
         return Like::create($data);
     }
 

@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('author');
             $table->string('title');
-            $table->string('content');
+            $table->text('content');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->unsignedBigInteger('user_id')->default('0');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');

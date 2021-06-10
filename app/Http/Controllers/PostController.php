@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Like;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -22,6 +25,19 @@ class PostController extends Controller
             $result[] = $this->show($post->id);
         }
         return $result;
+    }
+
+    public function getUserPost($user_id)
+    {
+        $posts = Post::all()->where("user_id","=",$user_id)->where("status","=","active");
+        $result = array();
+        foreach ($posts as $post) {
+            // if ($post['status'] == 'active')
+            $result[] = $this->show($post->id);
+        }
+        return $result;
+
+
     }
 
     /**
@@ -69,6 +85,7 @@ class PostController extends Controller
         $post_info = Post::find($id);
         if ($post_info == null) return response('Not found', 404); 
         $post_info->categories = CategoryController::getAllPostCategories($id);
+        $post_info->likes = LikeController::index($id);
 
         return $post_info;
     }

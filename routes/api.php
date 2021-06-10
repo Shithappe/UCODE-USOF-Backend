@@ -31,7 +31,7 @@ Route::post('/auth/reset', [MailController::class, 'sendEmail']);               
 Route::get('/users/{id}', [UserController::class, 'show']);                             // Show user by id
 
 Route::get('/posts', [PostController::class, 'index']);                                 // Show all posts
-Route::get('/post/{id}', [ProductController::class, 'show']);                           // Show posts by id
+Route::get('/post/{id}', [PostController::class, 'show']);                              // Show posts by id
 Route::get('/post/seach/{name}', [ProductController::class, 'search']);                 // Search post by name
 
 Route::get('/categories', [CategoryController::class, 'index']);                        // Show all categories
@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/posts', [PostController::class, 'store']);                            // Add post
     Route::patch('/posts/{id}', [PostController::class, 'update']);                     // Update post
+    Route::get('/user_posts/{id}', [PostController::class, 'getUserPost']);             //-----------------------------------
     Route::post('/categories', [CategoryController::class, 'store']);                   // Add category
 
     Route::patch('/categories/{id}', [CategoryController::class, 'update']);            // Update category date by id

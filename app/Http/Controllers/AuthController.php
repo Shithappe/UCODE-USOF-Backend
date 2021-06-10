@@ -12,7 +12,7 @@ class AuthController extends Controller
     public function register(Request $request) {
         $fields = $request->validate([
             'login' => 'required|string|unique:users,login',
-            'password' => 'required|string|confirmed',
+            'password' => 'required|string',
             'email' => 'required|string|unique:users,email'
         ]);
 
@@ -38,7 +38,6 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
 
-
         $user = User::where('email', $fields['email'])->first();
 
         if(!$user || !Hash::check($fields['password'], $user->password)) {
@@ -53,7 +52,7 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token
         ];
-
+        
         return response($response, 201);
     }
 
