@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/posts/{id}/comments', [CommentController::class, 'store']);           // Add comment to post
     Route::patch('/comments/{id}', [CommentController::class, 'update']);               // Update comment
     Route::post('/posts/{id}/likes', [LikeController::class, 'store']);                 // Add like to post
+    Route::post('/comments/{id}/likes', [LikeController::class, 'add_like_comment']);   // Add like to comment
     Route::delete('/posts/{id}/likes', [LikeController::class, 'destroy']);             // Delete like 
 
     Route::get('/products/seach/{name}', [ProductController::class, 'search']);

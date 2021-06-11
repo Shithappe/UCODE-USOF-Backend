@@ -67,15 +67,9 @@ class CommentController extends Controller
     public function show($id)
     {
         $comment_info = Comment::find($id);
+        $comment_info->likes = LikeController::index($id);
 
-
-        if ($comment_info == null) {
-            return response()->json([
-                "error" => [
-                    "message"  => "No such comment. Comment with id $id not found."
-                ]
-            ], 404); 
-        }
+        if ($comment_info == null) return  "No comment with id $id";
 
         return $comment_info;
     }
