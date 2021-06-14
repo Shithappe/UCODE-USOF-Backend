@@ -6,7 +6,10 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Like;
 use App\Models\Comment;
+use App\Models\postCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 // use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
@@ -116,4 +119,27 @@ class PostController extends Controller
     {
         return Post::destroy($id);
     }
+
+    public function getByCategories($idCategories)
+    {
+        return DB::table('post_categories')//->select('post_id')
+        ->where("category_id","=",$idCategories)
+        ->join("posts","id","=","post_id")
+        // ->rightJoin('posts', DB::raw("select count(likes.id), likes.post_id from likes group by likes.post_id"))
+        // ->select("likes.id", DB::raw('COUNT(likes.id)'))->groupBy('likes.post_id')
+        ->get();
+
+        $post_r = 
+        "SELECT *
+        FROM post_categories
+        where category_id = $idCategories
+        join 'posts' as p on p.id = post_categories.post_id
+        right join (
+            select count(likes.id) as counts, likes.post_id
+            from likes
+            GROUP BY likes.post_id
+        ) as tmp on posts.id = tmp.post_id;
+        ";
+    }
+
 }

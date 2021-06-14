@@ -47,7 +47,7 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::get('/products/seach/{name}', [ProductController::class, 'search']);
 
-
+Route::get('/get_post_by_cat/{idCategories}', [PostController::class, 'getByCategories']);
 // Private
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
